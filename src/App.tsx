@@ -6,9 +6,10 @@ import './App.css'
 function App() {
   const [phone, setPhone] = useState<string>('');
   const [otpCode, setotpCode] = useState<string>('');
-  const [currentSection, setCurrentSection] = useState<'login' | 'verification'>('login');
+  const [currentSection, setCurrentSection] = useState<'login' | 'verification' | 'submit'>('login');
   const [showButton, setShowButton] = useState(false);
   const [secondsLeft, setSecondsLeft] = useState(10);
+  const [hasError, setHasError] = useState(false);
 
   const urlApi = "https://shift-intensive.ru/api/"
 
@@ -55,16 +56,23 @@ function App() {
 
   const handleContinue = (): void => {
     if (phone.replace(/\D/g, '').length >= 11) {
+      setHasError(false);
       setCurrentSection('verification');
       // axios.post(`${urlApi}auth/otp`, {
       //   phone: phone.replace(/\D/g, '')
       // })
     } else {
-      alert("Неправильно введен номер телефона");
+      setHasError(true);
     }
   };
 
   const handleSubmit = (): void => {
+    if (otpCode.length == 6) {
+      setHasError(false);
+      setCurrentSection('submit');
+    } else {
+      setHasError(true);
+    }
     try {
       // axios.post(`${urlApi}users/signin`, {
       //   phone: phone.replace(/\D/g, ''),
@@ -86,11 +94,14 @@ function App() {
               Введите номер телефона для входа <span>в личный кабинет</span>
             </p>
             <input
-              className='in_phone'
+              className={`in_phone ${hasError ? 'input-error' : ''}`}
               placeholder='Телефон'
               type='tel' value={phone}
               onChange={handlePhoneChange}
             />
+            {hasError && (
+              <div className="error-message">Поле является обязательным</div>
+            )}
             <button className='btn_next' onClick={handleContinue}><span>Продолжить</span></button>
           </div>
         )}
@@ -106,24 +117,40 @@ function App() {
               value={phone}
               readOnly
             />
-
             <input
-              className='in_phone'
+              className={`in_phone ${hasError ? 'input-error' : ''}`}
               placeholder='Проверочный код'
               type='tel'
               maxLength={6}
+              value={otpCode}
               onChange={handleCodeChange}
             />
+            {hasError && (
+              <div className="error-message">Код должен содержать 6 цифр</div>
+            )}
             <div className="buttons-container">
               <button className='btn_next' onClick={handleSubmit}>
                 <span>Подтвердить</span>
               </button>
             </div>
+
             {!showButton && <p className='p_timer'>Запросить код повторно можно через {secondsLeft} секунд</p>}
             <div className='tm_container'>
 
               {showButton && <button className='btn_resend'>Запросить код ещё раз</button>}
             </div>
+          </div>
+        )}
+
+        {currentSection === 'submit' && (
+          <div className="verification-section">
+            <h2>Данные о пользователе</h2>
+            <input
+              className='in_phone'
+              value={phone}
+              readOnly
+            />
+
           </div>
         )}
       </div>

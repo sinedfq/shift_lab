@@ -131,3 +131,18 @@ h2 {
   flex-grow: 0;
 
 }
+
+.input-error {
+  border: 2px solid red !important;
+}
+
+.error-message {
+  font-family: "Inter", sans-serif;
+  font-weight: 400;
+  font-style: Regular;
+  font-size: 10px;
+  color: red;
+  margin-top: 5px;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
