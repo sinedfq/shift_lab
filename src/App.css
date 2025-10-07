@@ -1,0 +1,133 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 100px 240px 72px;
+  gap: 24px;
+  width: 1440px;
+  height: 644px;
+  background: #FFFFFF;
+  flex: none;
+  order: 0;
+  flex-grow: 1;
+}
+
+h2 {
+  font-family: "Inter", sans-serif;
+  font-weight: 700;
+  font-size: 24px;
+  font-style: Bold;
+  align-content: left;
+  width: 960px;
+  height: 32px;
+}
+
+.p_instruction {
+  font-family: "Inter", sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  font-style: Regular;
+  width: 464px;
+  height: auto;
+  padding-top: 20px;
+  line-height: 1.4;
+}
+
+.p_instruction span {
+  display: block;
+  margin-top: 2px;
+}
+
+.in_phone {
+  display: block;
+  border: 1px solid #CED2DA;
+  padding: 8px 12px;
+  border-radius: 8px;
+  margin-top: 20px;
+  margin-bottom: 16px;
+  width: 464px;
+  height: 48px;
+  font-family: "Inter", sans-serif;
+  font-weight: 400;
+  font-style: Regular;
+}
+
+.btn_next {
+  display: inline-flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 16px 32px;
+  gap: 8px;
+  position: static;
+  width: 328px;
+  background: #1975FF;
+  border-radius: 16px;
+  white-space: nowrap;
+  margin-top: 15px;
+}
+
+.btn_next:hover {
+  background: #104697;
+}
+
+.btn_next span {
+  font-family: "Inter", sans-serif;
+  font-style: Semi Bold;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 24px;
+  color: #FFFFFF;
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+  height: auto;
+}
+
+.btn_resend {
+  width: 188px;
+  height: 24px;
+
+  font-family: "Inter", sans-serif;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 24px;
+
+  color: #344051;
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+
+}
+
+.p_timer {
+  font-family: "Inter", sans-serif;
+  font-weight: 400;
+  font-style: Regular;
+  font-size: 14px;
+  line-height: 20px;
+  padding: 20px 0px 20px 70px;
+  color: #97A1AF;
+}
+
+.tm_container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 16px 32px;
+  gap: 8px;
+
+  width: 328px;
+  height: 56px;
+
+  border-radius: 16px;
+
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+
+}
