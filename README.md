@@ -12,6 +12,7 @@
 1. TypeScript
 2. React
 3. Vite
+4. Zustand
 
 <h3>Внешний вид проекта: </h3>
 
