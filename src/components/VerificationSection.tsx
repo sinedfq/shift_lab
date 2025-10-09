@@ -18,14 +18,27 @@ const VerificationSection: React.FC = () => {
         setShowButton,
     } = useAuthStore();
 
-    useEffect(() => {
+    const startTimer = () => {
         setShowButton(false);
         setSecondsLeft(60);
 
         const timerId = setTimeout(() => setShowButton(true), 60000);
+        let currentSeconds = 60;
+
         const intervalId = setInterval(() => {
-            useAuthStore.setState(state => ({ secondsLeft: Math.max(state.secondsLeft - 1, 0) }));
+            currentSeconds = Math.max(currentSeconds - 1, 0);
+            useAuthStore.setState({ secondsLeft: currentSeconds });
+
+            if (currentSeconds === 0) {
+                clearInterval(intervalId);
+            }
         }, 1000);
+
+        return { timerId, intervalId };
+    };
+
+    useEffect(() => {
+        const { timerId, intervalId } = startTimer();
 
         return () => {
             clearTimeout(timerId);
@@ -51,6 +64,18 @@ const VerificationSection: React.FC = () => {
             }
         } else {
             setHasError(true);
+        }
+    };
+
+    const handleResend = async () => {
+        console.log(phone);
+        try {
+            // await axios.post(`${urlApi}auth/otp/`, { 
+            //    phone: phone.replace(/\D/g, '') 
+            // });
+            startTimer();
+        } catch (error) {
+            console.error("Ошибка:", error);
         }
     };
 
@@ -81,7 +106,7 @@ const VerificationSection: React.FC = () => {
 
             {!showButton && <p className='p_timer'>Запросить код повторно можно через {secondsLeft} секунд</p>}
             <div className='tm_container'>
-                {showButton && <button className='btn_resend'>Запросить код ещё раз</button>}
+                {showButton && <button className='btn_resend' onClick={handleResend}>Запросить код ещё раз</button>}
             </div>
         </div>
     );
