@@ -20,10 +20,10 @@ const VerificationSection: React.FC = () => {
 
     const startTimer = () => {
         setShowButton(false);
-        setSecondsLeft(60);
+        setSecondsLeft(120);
 
-        const timerId = setTimeout(() => setShowButton(true), 60000);
-        let currentSeconds = 60;
+        const timerId = setTimeout(() => setShowButton(true), 120000);
+        let currentSeconds = 120;
 
         const intervalId = setInterval(() => {
             currentSeconds = Math.max(currentSeconds - 1, 0);
@@ -48,34 +48,41 @@ const VerificationSection: React.FC = () => {
 
     const handleCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setOtpCode(formatCode(e.target.value));
+        setHasError(false);
     };
 
-    const handleSubmit = async () => {
-        if (otpCode.length === 6) {
-            try {
-                // await axios.post(`${urlApi}users/signin`, {
-                //     phone: phone.replace(/\D/g, ''),
-                //     code: otpCode,
-                // });
-                setHasError(false);
-                setCurrentSection('submit');
-            } catch (error) {
-                console.error("Ошибка:", error);
-            }
-        } else {
+    const handleSubmit = async (): Promise<void> => {
+        if (otpCode.length < 6) {
             setHasError(true);
+            return;
+        }
+
+        try {
+            const response = await axios.post(`${urlApi}users/signin`, {
+                phone: phone.replace(/\D/g, ''),
+                code: otpCode,
+            });
+            setHasError(false);
+            setCurrentSection('submit');
+        } catch (error) {
+            if (axios.isAxiosError(error)) {
+                const status = error.response?.status;
+
+                if (status === 400 || status === 401) {
+                    setHasError(true);
+                    return;
+                }
+            }
         }
     };
 
     const handleResend = async () => {
-        console.log(phone);
         try {
-            // await axios.post(`${urlApi}auth/otp/`, { 
-            //    phone: phone.replace(/\D/g, '') 
-            // });
+            await axios.post(`${urlApi}auth/otp/`, {
+                phone: phone.replace(/\D/g, '')
+            });
             startTimer();
-        } catch (error) {
-            console.error("Ошибка:", error);
+        } catch {
         }
     };
 
@@ -96,7 +103,13 @@ const VerificationSection: React.FC = () => {
                 value={otpCode}
                 onChange={handleCodeChange}
             />
-            {hasError && <div className="error-message">Код должен содержать 6 цифр</div>}
+            {hasError && (
+                <div className="error-message">
+                    {otpCode.length < 6
+                        ? 'Код должен содержать 6 цифр'
+                        : 'Неверный проверочный код'}
+                </div>
+            )}
 
             <div className="buttons-container">
                 <button className='btn_next' onClick={handleSubmit}>
@@ -104,9 +117,18 @@ const VerificationSection: React.FC = () => {
                 </button>
             </div>
 
-            {!showButton && <p className='p_timer'>Запросить код повторно можно через {secondsLeft} секунд</p>}
+            {!showButton && (
+                <p className='p_timer'>
+                    Запросить код повторно можно через {secondsLeft} секунд
+                </p>
+            )}
+
             <div className='tm_container'>
-                {showButton && <button className='btn_resend' onClick={handleResend}>Запросить код ещё раз</button>}
+                {showButton && (
+                    <button className='btn_resend' onClick={handleResend}>
+                        Запросить код ещё раз
+                    </button>
+                )}
             </div>
         </div>
     );

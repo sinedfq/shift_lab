@@ -17,9 +17,9 @@ const LoginSection: React.FC = () => {
   const handleContinue = async () => {
     if (phone.replace(/\D/g, '').length >= 11) {
       try {
-        // await axios.post(`${urlApi}auth/otp/`, { 
-        //    phone: phone.replace(/\D/g, '') 
-        // });
+        const response = await axios.post(`${urlApi}auth/otp/`, {
+          phone: phone.replace(/\D/g, '')
+        });
         setHasError(false);
         setCurrentSection('verification');
       } catch (error) {
